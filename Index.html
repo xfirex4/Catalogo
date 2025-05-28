@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Variedades Masha</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>/* Reset básico */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: 'Quicksand', sans-serif; background: #ff66b2; color: #fff0f5; text-align: center; overflow-x: hidden; }
+
+canvas#fondoAnimado { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: linear-gradient(to bottom, #ff3399, #e578bc, #e60073); }
+
+.bienvenida { padding: 40px 20px; animation: fadeIn 2s ease-in-out; }
+
+.bienvenida img { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; box-shadow: 0 0 15px #ff66b2; margin-bottom: 20px; }
+
+.bienvenida h1 { font-family: 'Dancing Script', cursive; font-size: 2.4em; color: white; margin-bottom: 10px; }
+
+.frase { font-size: 1.2em; color: #ffe6f0; }
+
+.menu { padding: 30px 20px; animation: fadeIn 1.5s ease; }
+
+.menu h2 { font-size: 2em; color: white; margin-bottom: 25px; font-family: 'Dancing Script', cursive; }
+
+.botones { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+
+.botones button { width: 80%; max-width: 400px; padding: 15px 30px; font-size: 1.4em; font-family: 'Dancing Script', cursive; background: linear-gradient(45deg, #ff3385, #ff66b2); color: white; border: none; border-radius: 30px; box-shadow: 0 5px 12px rgba(255, 51, 133, 0.4); cursor: pointer; transition: transform 0.2s, opacity 0.3s; }
+
+.botones button:hover { transform: scale(1.05); opacity: 0.9; }
+
+.seccion { padding: 30px 20px; animation: fadeIn 1s ease-in-out; text-align: center; }
+
+.seccion h2 { font-size: 2.2em; font-family: 'Dancing Script', cursive; margin-bottom: 30px; color: white; }
+
+.galeria-vertical { display: flex; flex-direction: column; align-items: center; gap: 35px; margin-bottom: 30px; }
+
+.galeria-vertical figure { max-width: 320px; background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 20px; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2); backdrop-filter: blur(5px); }
+
+.galeria-vertical img { width: 100%; height: auto; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 0 12px #ff99cc; }
+
+.galeria-vertical figcaption { font-size: 1.1em; margin-bottom: 10px; color: #fff8f9; }
+
+.boton-compra { display: inline-block; padding: 10px 20px; background: linear-gradient(45deg, #00cc88, #00ffaa); color: white; text-decoration: none; font-weight: bold; border-radius: 25px; font-size: 1em; box-shadow: 0 5px 12px rgba(0, 204, 136, 0.4); transition: transform 0.2s, background 0.3s; }
+
+.boton-compra:hover { transform: scale(1.05); background: #00996e; }
+
+.btn-regreso { margin-top: 20px; padding: 10px 24px; background: linear-gradient(45deg, #ff3385, #ff66a3); border: none; border-radius: 25px; color: white; font-size: 1.1em; cursor: pointer; box-shadow: 0 4px 10px rgba(255, 51, 133, 0.4); transition: transform 0.2s; }
+
+.btn-regreso:hover { transform: scale(1.05); }
+
+.oculto { display: none !important; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+canvas#fondoAnimado {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Muy importante para que quede al fondo */
+  pointer-events: none; /* Así no bloquea clics */
+}
+
+/* 1) Añade esta animación para que .logo-masha pase de opaco a visible */
+@keyframes aparecer {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* 2) Ajusta .logo-masha para que use la animación y se centre */
+.logo-masha {
+  display: block;
+  margin: 0 auto 20px;
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0 0 20px #ff99cc;
+  opacity: 0;
+  animation: aparecer 0.8s ease-out forwards 0.3s; /* duración 0.8s, delay 0.3s */
+}
+
+
+.galeria {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 2rem;
+}
+
+.galeria figure {
+  max-width: 320px; /* Más grande */
+  width: 100%;
+  text-align: center;
+  background: rgba(255, 150, 200, 0.2); /* Más transparente para que se note el blur */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 24px;
+  padding: 1.8rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 105, 180, 0.4); /* Borde rosado bonito */
+  transition: transform 0.3s ease;
+}
+
+.galeria figure:hover {
+  transform: scale(1.08);
+}
+
+.galeria img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.6); /* sombra rosada */
+}</style>
+</head>
+<body>
+  <canvas id="fondoAnimado"></canvas>
+
+  <div id="bienvenida" class="bienvenida">
+    <img src="https://i.imgur.com/yYrCCEW.png" alt="Logo Variedades Masha" />
+    <h1>Bienvenidos a Variedades Masha</h1>
+    <p class="frase">✨🌸 Flores que nunca se marchitan, hechas con amor y creatividad 🌿✨</p>
+  </div>
+
+  <nav id="menu" class="menu oculto">
+    <img src="https://i.imgur.com/Wxmt1R3.png" alt="Variedades Masha" class="logo-masha">
+    <h2>Variedades Masha</h2>
+    <div class="botones">
+      <button data-target="flores">Flores</button>
+      <button data-target="maceteras">Macetera</button>
+        <button data-target="ramos">Ramos</button>
+      <button data-target="llaveros">Llaveros</button>
+      <button data-target="diademas">Diademas</button>
+      <button data-target="prensapelos">Prensapelos</button>
+      <button data-target="leer" class="oculto">Leer</button>
+    </div>
+  </nav>
+
+<section id="leer" class="seccion oculto">
+  <h2>Información de Pago y Pedido</h2>
+  <p>Para realizar un pedido, se debe pagar el 50% por adelantado.</p>
+  <p>Consulta precios o haz tu pedido personalizado por 
+    <a href="https://wa.me/50557322161?text=Hola,%20quiero%20consultar%20sobre%20precios%20y%20pedidos%20personalizados" target="_blank" rel="noopener noreferrer">
+      WhatsApp
+    </a>.
+      <button class="btn-regreso">Regresar</button>
+  </p>
+</section>
+
+
+  <main id="secciones">
+<!-- Sección Flores -->
+<section class="seccion oculto" id="flores">
+  <h2>Nuestras Flores</h2>
+  <div class="galeria">
+    <figure>
+      <img src="https://i.imgur.com/QVcVBWT.png" alt="Gerberas">
+      <p>🌼 Gerberas: Coloridas y alegres, transmiten energía y felicidad a cualquier entorno.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Gerberas" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/m9wnoR0.png" alt="Alcatraz">
+      <p>🌿 Alcatraz: Un símbolo de pureza y elegancia, ideal para embellecer cualquier rincón con su presencia imponente.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Alcatraz" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/gNkFOOS.png" alt="Girasol">
+      <p>🌻 Girasol: Representa la felicidad y la luz del sol, una flor vibrante que ilumina cualquier día. (Hecho de foami)</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Girasol" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/hMs6CEL.png" alt="Cerezo">
+      <p>🌸 Cerezo: Delicadas flores que simbolizan la belleza efímera y los nuevos comienzos, una obra de arte natural.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Cerezo" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/azgcIHq.png" alt="Orquídea">
+      <p>🌿 Orquídea: Exquisita y sofisticada, representa el amor y la fuerza interior. (Hecha de limpia pipa)</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Orquídea" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/0JnTViK.png" alt="Jazmín">
+      <p>🌿 Jazmín: Una fragancia suave y delicada que llena el aire de frescura y armonía, ideal para espacios serenos.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Jazmín" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/pWSvsiA.png" alt="Nochebuena">
+      <p>🎄 Nochebuena: Una flor vibrante y festiva, llena de energía y alegría, ideal para decorar durante las fiestas.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Nochebuena" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/m8v4Azr.png" alt="Lavanda">
+      <p>🌿 Lavanda: Su dulce aroma y color púrpura evocan tranquilidad y frescura, perfecta para armonizar cualquier espacio.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Lavanda" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/acaKeRV.png" alt="Claveles">
+      <p>🌷 Claveles: Símbolo de amor y fascinación, con un aroma único que encanta en cualquier ambiente.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Claveles" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/mt1eqiN.png" alt="Lirio">
+      <p>🌸 Lirio: Elegante y sofisticado, el lirio es un símbolo de pureza, belleza y refinamiento.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20Lirio" class="boton-compra">Comprar</a>
+    </figure>
+  </div>
+  <button class="btn-regreso">Regresar</button>
+</section>
+
+    <!-- Sección Maceteras -->
+    <section class="seccion oculto" id="maceteras">
+      <h2>Nuestras maceteras</h2>
+      <div class="galeria">
+        <figure>
+          <img src="https://i.imgur.com/AU2jowO.png" alt="macetera de limpia pipa" />
+          <p>Macetera con flores de limpia pipa 🌸, una opción colorida y única para darle un toque alegre y original a tu hogar. 🌿</p>
+          <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20macetera%20de%20limpiapipa" class="boton-compra">Comprar</a>
+        </figure>
+        <figure>
+          <img src="https://i.imgur.com/UWryGKD.png" alt="macetera de limpia pipa" />
+          <p>Macetera con flores de limpia pipa 🌸, un detalle vibrante y duradero para alegrar cualquier rincón de tu hogar. 🌿</p>
+          <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20macetera%20de%20limpiapipa" class="boton-compra">Comprar</a>
+        </figure>
+        <figure>
+          <img src="https://i.imgur.com/pjhvpzJ.png" alt="Macetera con girasol" />
+          <p>Macetera con girasoles 🌻, flores brillantes que aportan energía y alegría a tu espacio. ¡Un toque de frescura y color para tu hogar! </p>
+          <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20macetera%20de%20girasol" class="boton-compra">Comprar</a>
+        </figure>
+      </div>
+      <button class="btn-regreso">Regresar</button>
+    </section>
+
+<!-- Sección Ramos -->
+<section class="seccion oculto" id="ramos">
+  <h2>Nuestros Ramos</h2>
+  <div class="galeria">
+    <figure>
+      <img src="https://i.imgur.com/swNlO2n.png" alt="Ramo de limpia pipa">
+      <p>✨ Ramo de limpia pipa, color y creatividad sin límites.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20ramo%20de%20limpiapipa" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/YlvczK0.png" alt="Ramo de flores eternas con chocolate">
+      <p>🍫🌹 Ramo de rosas eternas con chocolate, amor y dulzura en un solo detalle.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20ramo%20de%20rosas%20eternas%20con%20chocolate" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/Ro6mYV8.png" alt="Ramo de rosas blancas">
+      <p>🤍 Ramo blanco de rosas eternas, elegancia y pureza que perdura.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20un%20ramo%20de%20rosas%20blancas" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/PkRhZsp.png" alt="Ramo de gerberas">
+      <p>🌸 Ramo de gerberas, frescura y color para iluminar tu día.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20ramo%20de%20gerberas" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/fjWc6be.png" alt="Ramo de flor amarilla">
+      <p>🌼 Ramo de flores amarillas, brillo y alegría en cada pétalo.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20ramo%20de%20flores%20amarillas" class="boton-compra">Comprar</a>
+    </figure>
+    
+    <figure>
+  <img src="https://i.imgur.com/GkgE6YA.png" alt="Ramo grande de flores rojas">
+  <figcaption>
+    <h3>Ramo Grande de Flores Rojas</h3>
+    <p>❤️🌹 Un detalle que habla por sí solo. Este ramo grande de flores rojas es perfecto para expresar amor, pasión y admiración.</p>
+    <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20ramo%20grande%20de%20flores%20rojas" class="boton-compra">Comprar</a>
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://i.imgur.com/kZXADBo.png" alt="Set de 2 ramos de flores rojas">
+  <figcaption>
+    <h3>Set de 2 Ramos de Flores Rojas</h3>
+    <p>❤️❤️ ¡El doble de amor en cada flor! Este hermoso set incluye dos ramos grandes de flores rojas.</p>
+    <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20set%20de%202%20ramos%20de%20flores%20rojas" class="boton-compra">Comprar</a>
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://i.imgur.com/DBnS3gB.png" alt="Cruz de rosas rojas">
+  <figcaption>
+    <h3>Cruz de Rosas Rojas</h3>
+    <p>✝️🌹 Un homenaje lleno de amor y respeto. Esta cruz elaborada con rosas rojas representa la memoria eterna y el cariño profundo hacia quienes ya no están.</p>
+    <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20cruz%20de%20rosas%20rojas" class="boton-compra">Comprar</a>
+  </figcaption>
+</figure>
+
+    
+  </div>
+  <button class="btn-regreso">Regresar</button>
+</section>
+
+<!-- Sección Llaveros -->
+<section class="seccion oculto" id="llaveros">
+  <h2>Nuestros Llaveros</h2>
+  <div class="galeria">
+    <figure>
+      <img src="https://i.imgur.com/ptqqX6p.png" width="400" height="400" alt="Llavero de girasol">
+      <p>🌻 Brilla como un girasol, siempre buscando la luz. ☀️✨</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20llavero%20de%20girasol" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/gHw0Rcu.png" alt="Llavero de rosa eterna de cualquier color">
+      <p>✨ Llavero único, un detalle especial para llevar siempre contigo.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20llavero" class="boton-compra">Comprar</a>
+    </figure>
+  </div>
+  <button class="btn-regreso">Regresar</button>
+</section>
+
+<!-- Sección Diademas -->
+<section class="seccion oculto" id="diademas">
+  <h2>Nuestras diademas</h2>
+  <div class="galeria">
+    <figure>
+      <img src="https://i.imgur.com/bbk6aUl.png" alt="Diadema beige elegante">
+      <p>✨ Diadema en tono beige elegante ,perfecta para un look cálido y delicado. Aporta un estilo suave y sofisticado que combina con todo.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20diadema%20beige" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/FTORkPs.png" alt="Diadema rojo profundo">
+      <p>❤️ Diadema en rojo profundo , ideal para resaltar tu personalidad con un toque apasionado y elegante.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20diadema%20rojo%20profundo" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/RweF94o.png" alt="Diadema azul serenidad">
+      <p>💙 Diadema en azul serenidad , transmite tranquilidad y frescura. Ideal para días relajados y estilos suaves.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20diadema%20azul" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/K1kzFI9.png" alt="Diadema rosa pastel romántica">
+      <p>🌸 Diadema rosa pastel , un accesorio delicado y femenino que aporta dulzura y romanticismo a tu peinado.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20diadema%20rosa%20pastel" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/yD7f2oT.png" alt="Diadema gris moderno">
+      <p>🩶 Diadema en gris moderno , un estilo neutro y versátil que combina elegancia minimalista con funcionalidad.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20la%20diadema%20gris" class="boton-compra">Comprar</a>
+    </figure>
+  </div>
+  <button class="btn-regreso">Regresar</button>
+</section>
+
+<!-- Sección Prensapelos -->
+<section class="seccion oculto" id="prensapelos">
+  <h2>Nuestros Prensapelos</h2>
+  <div class="galeria">
+    <figure>
+      <img src="https://i.imgur.com/rq3GZ3U.png" width="400" height="400" alt="Prensapelos Menta">
+      <p>🌿 Prensapelos Menta: Un toque de frescura y elegancia para tu cabello, ideal para un estilo natural y vibrante.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20Prensapelos%20Menta" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/omypscb.png" width="400" height="400" alt="Prensapelos Durazno">
+      <p>🍑 Prensapelos Durazno: Suave y delicado, perfecto para darle un toque dulce y femenino a tu look.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20Prensapelos%20Durazno" class="boton-compra">Comprar</a>
+    </figure>
+    <figure>
+      <img src="https://i.imgur.com/6Yfq0v1.png" width="400" height="400" alt="Prensapelos Rubí">
+      <p>❤️ Prensapelos Rubí: Un accesorio vibrante y apasionado, ideal para resaltar la belleza y la confianza en ti misma.</p>
+      <a href="https://wa.me/50557322161?text=Quiero%20comprar%20el%20Prensapelos%20Rubí" class="boton-compra">Comprar</a>
+    </figure>
+  </div>
+  <button class="btn-regreso">Regresar</button>
+</section>
+  </main>
+
+  <script>window.addEventListener('load', () => {
+  setTimeout(() => {
+  document.getElementById('bienvenida').classList.add('oculto');
+  document.getElementById('menu').classList.remove('oculto');
+
+  // Mostrar todos los botones del menú, incluido el "Leer"
+  document.querySelectorAll('#menu button').forEach(btn => btn.classList.remove('oculto'));
+}, 2500);
+
+
+  // Manejar clicks de menú
+  document.querySelectorAll('#menu button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.target;
+      mostrarSeccion(id);
+    });
+  });
+
+  // Manejar botón regresar en cada sección
+  document.querySelectorAll('.btn-regreso').forEach(btn => {
+    btn.addEventListener('click', regresarMenu);
+  });
+});
+
+function mostrarSeccion(id) {
+  document.getElementById('menu').classList.add('oculto');
+  document.querySelectorAll('.seccion').forEach(s => s.classList.add('oculto'));
+  const sec = document.getElementById(id);
+  if (sec) sec.classList.remove('oculto');
+}
+
+function regresarMenu() {
+  document.querySelectorAll('.seccion').forEach(s => s.classList.add('oculto'));
+  document.getElementById('menu').classList.remove('oculto');
+}
+
+// Fondo animado más suave y con burbujas pequeñas
+const canvas = document.getElementById('fondoAnimado');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const num = 60; // menos burbujas
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// partículas más pequeñas y lentas
+for (let i = 0; i < num; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 5 + 1,
+    dx: (Math.random() - 0.5) * 0.3,
+    dy: (Math.random() - 0.5) * 0.3,
+    opacity: Math.random() * 0.4 + 0.3
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,182,193,${p.opacity})`;
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();</script>
+</body>
+</html>
